@@ -1,0 +1,78 @@
+Outline for Word Guess Game
+
+Theme : PixelArt | 90's Action Movies
+
+//This program receives single character input from the user
+//and matches it to characters making up a predefined word
+//selected at random from an array. If the user enters a matching
+//character this character is displayed on the screen at the same
+//index it would be in the word. User wins when they have guessed
+//the word correctly and losses when they have used all their guesses.
+
+//The game will respawn a new word after every game, win or loose.
+
+var dictionary = [a,huge,array,of,words]
+var points = 0;
+var level = 1;
+var numberOfGuesses = number of guesses remaining for user - different levels have harder words and less        guesses. defined by random word length divided level number
+var lettersAlreadyGuessed = initialized as an empty array but filled with user input
+
+function returnRandomWord() {
+    //randomly picks a word from the dictionary and pipes to returnRandomWord
+    dictionary[ Math.random(dictionarylength) ]
+}
+
+function breakIntoArray(string) {
+    //breaks string into an array, places into dom and returns array
+}
+
+function levelUp() {
+    //add one to level number
+    //increase speed of music
+}
+
+function gameOver() {
+    //remove event listener
+    //show loser text
+    //play loser music
+}
+
+function keyUpHandler(event) {
+    //if first play removes anykey prompt
+    //checks if the character the user inputs is in the randomly chosen word
+    //adds key pressed to lettersAlreadyGuessed array
+    //play pop sound
+
+    if key pressed does not have an index in lettersAlreadyGuessed 
+        randomWordArray forEach letter
+            if pressed key is equal to letter
+                display character on screen
+            else
+                display wrong choice animation
+            
+            subtract one from the number of guesses
+    else key pressed has index in lettersAlreadyGuessed
+        if points are the same as the length of the word 
+            add 1 to point
+            //call update scoreboard
+            //remove event listener
+            //show level beat card
+            //call level up function 
+        else
+            highlight character already displayed on page
+
+    
+    if number of guesses is less than zero call gameover function
+}
+
+function updateHTML(DOMElement, string) {
+    //set an elements textContent to string
+}
+
+function init() {
+    //executes returnRandomWord and sets it to variable in game scope
+    //adds keyup listener linked to keyUpHandler
+    //prints 'Press Any Key To Play'
+}
+//start our program
+init();
