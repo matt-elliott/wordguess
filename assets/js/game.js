@@ -8,7 +8,8 @@
 //The game will respawn a new word after every game, win or loose.
 
 //var numberOfGuesses = number of guesses remaining for user - different levels have harder words and less        guesses. defined by random word length divided level number
-var welcomeMessage = document.getElementById('message-box').getElementsByTagName('h1')[0];
+var welcomeMessage = document.getElementById('message-box');
+var alreadyPlayed = document.getElementById('already-played');
 
 var theGame = {
     dictionary: ['terminator', 'speed', 'the rock', 'face off', 'true lies', 'predator'],
@@ -19,15 +20,11 @@ var theGame = {
     firstGame: true,
 
     returnRandomWord: function () {
-        return this.dictionary[Math.floor(Math.random() * this.dictionary.length)].split('');
+        return this.dictionary[Math.floor(Math.random() * this.dictionary.length)];
     },
 
     updateLettersAlreadyGuessed: function (item) {
         this.lettersAlreadyGuessed.push(item);
-
-        this.lettersAlreadyGuessed.forEach(function (letter) {
-            theGame.updateHTML(welcomeMessage, letter);
-        });
     },
 
     levelUp: function () {
@@ -48,19 +45,22 @@ var theGame = {
         //play loser music
     },
 
-    updateHTML: function (DOMElement, newString) {
-        DOMElement.textContent = newString;
+    updateHTML: function (DOMElement, newString, addition) {
+        if (addition) {
+            DOMElement.textContent = DOMElement.textContent + newString;
+        } else {
+            DOMElement.textContent = newString;
+        }
     },
 
     init: function () {
         //executes returnRandomWord and sets it to variable in game scope
-        this.randomWordArray = this.returnRandomWord();
-        this.numberOfGuesses = this.randomWordArray.length * (this.level);
-        console.log(this.randomWordArray);
+        this.randomWord = this.returnRandomWord();
+        this.numberOfGuessesAvailable = this.randomWord.length * (this.level);
+
+        console.log(this.randomWord);
         if (this.firstGame) {
-            this.updateHTML(welcomeMessage, 'Press Any Key to Play!');
-        } else {
-            this.updateHTML(welcomeMessage, ' ');
+            this.updateHTML(welcomeMessage, 'Press Any Key to Play!', false);
         }
     }
 
@@ -72,28 +72,43 @@ function keyUpHandler(event) {
     //adds key pressed to lettersAlreadyGuessed array
     //play pop sound
 
-    if (theGame.numberOfGuesses <= 0) {
+    if (theGame.numberOfGuessesAvailable === 0) {
         theGame.gameOver();
     }
 
     if (theGame.firstGame) {
-        welcomeMessage.textContent = ' ';
+        welcomeMessage.textContent = 'Welcome back!';
         theGame.firstGame = false;
     }
 
+    // if(lettersAlreadyGuessed.length === )
+    //somehow check if we've already won - either track slots that are filled
+    //or run a comparison but right now theres no way to win…
+
     if (theGame.lettersAlreadyGuessed.indexOf(event.key) === -1) {
-        theGame.randomWordArray.forEach(function (letter) {
+        //see if can make split more clean - can i querey the string itself?
+        theGame.randomWord.split('').forEach(function (letter) {
             if (event.key === letter) {
                 //found match - show to
-                theGame.updateHTML(welcomeMessage, event.key);
+                theGame.updateHTML(alreadyPlayed, letter, true);
             } else {
                 //no match 
-                theGame.updateHTML(welcomeMessage, 'x');
+                // theGame.updateHTML(welcomeMessage, 'x', true, true);
             }
         });
 
         //now that we have used the letter, add it to the array
         theGame.updateLettersAlreadyGuessed(event.key);
+
+        theGame.updateHTML(
+            document.getElementById('already-played'),
+            event.key,
+            true
+        );
+
+        if (theGame.lettersAlreadyGuessed.length === theGame.randomWord.length) {
+            theGame.gameOver();
+        }
         console.log(theGame.lettersAlreadyGuessed);
     } else if (theGame.lettersAlreadyGuessed.indexOf(event.key) >= -1) {
         console.log(`youve alreaady played ${event.key}, sir`);
